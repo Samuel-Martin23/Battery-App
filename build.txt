@@ -1,0 +1,3 @@
+sudo pyinstaller Battery\ App.spec
+
+mkdir -p ./MyApp.app/Contents/MacOS
