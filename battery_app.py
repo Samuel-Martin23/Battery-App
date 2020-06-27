@@ -4,6 +4,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from threading import Timer
 from os import system, path, popen
+from PyQt5 import QtCore
 
 
 def get_path_to_resources():
@@ -28,11 +29,6 @@ def check_battery():
     global check_plugged
     global previous_percent
     current_percent = psutil.sensors_battery().percent
-
-    battery_levels_images = ["battery_charging_1.png", "battery_charging_2.png",
-                             "battery_charging_3.png", "battery_charging_4.png", "battery_charging_5.png"]
-    battery_levels_numbers = [100, 80, 60, 40, 20]
-
     plugged = psutil.sensors_battery().power_plugged
 
     if plugged and check_plugged:
@@ -82,11 +78,14 @@ def run():
     # Add the menu to the tray
     tray.setContextMenu(menu)
 
-    check_battery()
+    QtCore.QTimer.singleShot(50, lambda: check_battery())
 
     sys.exit(app.exec_())
 
 
+battery_levels_numbers = [100, 80, 60, 40, 20]
+battery_levels_images = ["battery_charging_1.png", "battery_charging_2.png",
+                         "battery_charging_3.png", "battery_charging_4.png", "battery_charging_5.png"]
 thread = None
 check_plugged = True
 previous_percent = 0
