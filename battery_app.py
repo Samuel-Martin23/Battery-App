@@ -78,8 +78,6 @@ def run():
     # Add the menu to the tray
     tray.setContextMenu(menu)
 
-    QtCore.QTimer.singleShot(50, lambda: check_battery())
-
     sys.exit(app.exec_())
 
 
@@ -91,4 +89,5 @@ check_plugged = True
 previous_percent = 0
 path_to_resources = get_path_to_resources()
 app = QApplication([])
+QtCore.QTimer.singleShot(50, lambda: check_battery())
 run()
