@@ -25,23 +25,25 @@ def send_battery_level_notification(battery_level, battery_image):
 
 
 def check_battery():
-    global thread
-    global check_plugged
-    global previous_percent
-    current_percent = psutil.sensors_battery().percent
-    plugged = psutil.sensors_battery().power_plugged
+    if popen("ioreg -r -k AppleClamshellState -d 4 | grep AppleClamshellState  | head -1").\
+               readline()[-4:].strip() == "No":
+        global thread
+        global check_plugged
+        global previous_percent
+        current_percent = psutil.sensors_battery().percent
+        plugged = psutil.sensors_battery().power_plugged
 
-    if plugged and check_plugged:
-        previous_percent = 0
-        check_plugged = False
-    elif not plugged and not check_plugged:
-        previous_percent = 0
-        check_plugged = True
+        if plugged and check_plugged:
+            previous_percent = 0
+            check_plugged = False
+        elif not plugged and not check_plugged:
+            previous_percent = 0
+            check_plugged = True
 
-    for i in range(0, len(battery_levels_numbers)):
-        if current_percent == battery_levels_numbers[i] and previous_percent != battery_levels_numbers[i]:
-            send_battery_level_notification(battery_levels_numbers[i], resource_path(battery_levels_images[i]))
-            previous_percent = current_percent
+        for i in range(0, len(battery_levels_numbers)):
+            if current_percent == battery_levels_numbers[i] and previous_percent != battery_levels_numbers[i]:
+                send_battery_level_notification(battery_levels_numbers[i], resource_path(battery_levels_images[i]))
+                previous_percent = current_percent
 
     thread = Timer(5, check_battery)
     thread.start()

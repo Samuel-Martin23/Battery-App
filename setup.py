@@ -5,14 +5,23 @@ Usage:
     python setup.py py2app
 """
 
+from os import popen
 from setuptools import setup
 
 APP = ['battery_app.py']
-DATA_FILES = ["Assets/battery_charging_icon.png", "Assets/battery_charging_1.png", "Assets/battery_charging_2.png",
-              "Assets/battery_charging_3.png", "Assets/battery_charging_4.png", "Assets/battery_charging_5.png"]
+if popen("defaults read -g AppleInterfaceStyle").readline() == "Dark\n":
+    icon = 'Assets/Dark/icon.icns'
+    DATA_FILES = ["Assets/Dark/battery_charging_icon.png", "Assets/Dark/battery_charging_1.png",
+                  "Assets/Dark/battery_charging_2.png", "Assets/Dark/battery_charging_3.png",
+                  "Assets/Dark/battery_charging_4.png", "Assets/Dark/battery_charging_5.png"]
+else:
+    icon = 'Assets/Light/icon.icns'
+    DATA_FILES = ["Assets/Light/battery_charging_icon.png", "Assets/Light/battery_charging_1.png",
+                  "Assets/Light/battery_charging_2.png", "Assets/Light/battery_charging_3.png",
+                  "Assets/Light/battery_charging_4.png", "Assets/Light/battery_charging_5.png"]
 OPTIONS = {
     'argv_emulation': True,
-    'iconfile': 'Assets/icon.icns',
+    'iconfile': icon,
     'plist': {
         'LSUIElement': True
     }
