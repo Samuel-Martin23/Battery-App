@@ -4,7 +4,6 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from threading import Timer
 from os import system, path, popen
-from PyQt5 import QtCore
 
 
 def get_path_to_resources():
@@ -19,9 +18,9 @@ def get_path_to_resources():
 def send_battery_level_notification(battery_level, battery_image):
     battery_image = battery_image[1:]
     battery_image = battery_image.replace("/", ":", battery_image.count("/"))
-    system("osascript -e 'display dialog \"Current Battery Level: {}%\" buttons {{\"Ok\"}} "
-           "default button \"Ok\" with icon file "
-           "\"{}\"'".format(battery_level, battery_image))
+    path_to_script = resource_path("send_battery_notification.scpt").replace(" ", "\\ ")
+    system('osascript {} "{}" "{}"'.format(path_to_script, "Current Battery Level: {}%".format(battery_level),
+                                           battery_image))
 
 
 def check_battery():
@@ -91,5 +90,5 @@ check_plugged = True
 previous_percent = 0
 path_to_resources = get_path_to_resources()
 app = QApplication([])
-QtCore.QTimer.singleShot(50, lambda: check_battery())
+check_battery()
 run()

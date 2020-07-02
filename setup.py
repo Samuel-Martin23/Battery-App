@@ -19,6 +19,8 @@ else:
     DATA_FILES = ["Assets/Light/battery_charging_icon.png", "Assets/Light/battery_charging_1.png",
                   "Assets/Light/battery_charging_2.png", "Assets/Light/battery_charging_3.png",
                   "Assets/Light/battery_charging_4.png", "Assets/Light/battery_charging_5.png"]
+
+DATA_FILES.append("send_battery_notification.scpt")
 OPTIONS = {
     'argv_emulation': True,
     'iconfile': icon,
