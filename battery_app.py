@@ -1,7 +1,7 @@
 import sys
 import psutil
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import (QSystemTrayIcon, QMenu, QAction, QApplication)
 from threading import Timer
 from os import system, path, popen
 
@@ -10,17 +10,16 @@ def get_path_to_resources():
     paths = popen("mdfind -name Battery App").readlines()
     for p in paths:
         if p[-5:] == ".app\n":
-            resources_location = p.replace("\n", "")
-            resources_location = resources_location + "/Contents/Resources/"
-            return resources_location
+            return p.replace("\n", "") + "/Contents/Resources/"
 
 
 def send_battery_level_notification(battery_level, battery_image):
     battery_image = battery_image[1:]
     battery_image = battery_image.replace("/", ":", battery_image.count("/"))
     path_to_script = resource_path("send_battery_notification.scpt").replace(" ", "\\ ")
-    system('osascript {} "{}" "{}"'.format(path_to_script, "Current Battery Level: {}%".format(battery_level),
-                                           battery_image))
+    message_notification = "Current battery level: {}%".format(battery_level)
+
+    system('osascript {} "{}" "{}"'.format(path_to_script, message_notification, battery_image))
 
 
 def check_battery():
@@ -58,6 +57,10 @@ def resource_path(relative_path):
 
 
 def run():
+    """
+    System tray code from LearnPyQt
+    https://www.learnpyqt.com/courses/adanced-ui-features/system-tray-mac-menu-bar-applications-pyqt/
+    """
     app.setQuitOnLastWindowClosed(False)
     # Create the icon
     image_path = resource_path("battery_charging_icon.png")
