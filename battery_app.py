@@ -14,12 +14,11 @@ def get_path_to_resources():
 
 
 def send_battery_level_notification(battery_level, battery_image):
-    battery_image = battery_image[1:]
-    battery_image = battery_image.replace("/", ":", battery_image.count("/"))
     path_to_script = resource_path("send_battery_notification.scpt").replace(" ", "\\ ")
     message_notification = "Current battery level: {}%".format(battery_level)
+    image_path = battery_image[1:].replace("/", ":", battery_image.count("/"))
 
-    system('osascript {} "{}" "{}"'.format(path_to_script, message_notification, battery_image))
+    system('osascript {} "{}" "{}"'.format(path_to_script, message_notification, image_path))
 
 
 def check_battery():
